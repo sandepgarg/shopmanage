@@ -7,7 +7,7 @@ package com.sg.sm.pojo;
  * @author Sandeep Garg
  *
  */
-public class ShopMaster {
+public class ShopMaster implements Comparable<ShopMaster> {
 	private String id;
 	private String name;
 	private String number;
@@ -120,5 +120,10 @@ public class ShopMaster {
 	@Override
 	public int hashCode() {
 		return 17 + 3 * getId().hashCode();
+	}
+
+	@Override
+	public int compareTo(ShopMaster shop) {
+		return getId().compareTo(shop.getId());
 	}
 }

@@ -14,80 +14,39 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.util.UriUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /**
  * @author Sandeep Garg
  *
  */
 public class AddressUtility {
 	
-	public static Location getLocationByAddress(String locationAddress) {
-		Location location = new Location();
-		String address = "Sayaji Hotel, Near balewadi stadium, pune";
-		if(locationAddress != null) {
-			locationAddress = address;
-		}
-        String locationAddressInURL = locationAddress.replaceAll(" ", "%20");
-        
-        String str = "http://maps.googleapis.com/maps/api/geocode/json?address="
-                + locationAddressInURL + "&sensor=true";
-        
-        Location ss = readWebService(address);
-       /* JSONObject json;
-        try {
-
-            String lat, lon;
-            json = new JSONObject(ss);
-            JSONObject geoMetryObject = new JSONObject();
-            JSONObject locations = new JSONObject();
-            JSONArray jarr = json.getJSONArray("results");
-            int i;
-            for (i = 0; i < jarr.length(); i++) {
-                json = jarr.getJSONObject(i);
-                geoMetryObject = json.getJSONObject("geometry");
-                locations = geoMetryObject.getJSONObject("location");
-                lat = locations.getString("lat");
-                lon = locations.getString("lng");
-
-                locationPoint = Utils.getGeoPoint(Double.parseDouble(lat),
-                        Double.parseDouble(lon));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-        location.setLng("2434211423");
-        location.setLat("345223456");
-        return location;
-    }
-
-	private static Location readWebService(String address) {
+	/**
+	 * 
+	 * @param address
+	 * @return
+	 */
+	public static Location readWebService(String address) {
 		Location locationPoint = null;
 		try {
 			String encoding ="UTF-8";
 	        URL url = new URL("http://maps.googleapis.com/maps/api/geocode/json?address="
 	                        + UriUtils.encodeQuery(address, encoding) + "&sensor=true");
 	        
-			//address = UriUtils.encodeQuery(address, encoding);
 	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	        conn.setRequestMethod("GET");
 	        conn.setRequestProperty("Accept", "application/json");
 
 	        if (conn.getResponseCode() != 200) {
-	            throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());//TODO
+	            throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());//TODO -ShopManageException
 	        }
 	        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
 	        String output = "", full = "";
 	        while ((output = br.readLine()) != null) {
-	            System.out.println(output);
 	            full += output;
 	        }
-	       // gson.getResults().get(0).getFormatted_address(),
 	        
-	        ///////////////////////////////////////////////////////////////////////////////////////////
 	        JSONObject json;
-	        System.err.println(full);
+	        System.out.println(full);
 	        try {
 
 	            String lat, lon;
@@ -100,48 +59,50 @@ public class AddressUtility {
 	                json = jarr.getJSONObject(i);
 	                geoMetryObject = json.getJSONObject("geometry");
 	                locations = geoMetryObject.getJSONObject("location");
-	                lat = locations.getString("lat");
-	                lon = locations.getString("lng");
-	                locationPoint = new Location(); 
-	                locationPoint.setLat(lat);
-	                locationPoint.setLng(lon);
-
+	                lat = "" + locations.getDouble("lat");
+	                lon = ""+ locations.getDouble("lng");
+	                locationPoint = new Location(lat, lon); 
 	            }
 	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	        ///////////////////////////////////////////////////////////////////////////////////////////
-	        ObjectMapper mapper = new ObjectMapper();
-//	        Shop shop = mapper.readValue(full, Shop.class);
-	        
-	        float[] distance = new float[1];
-	        // distance[0] is now the distance between these lat/lons in meters
-	        if (distance[0] < 2.0) {
-	            // your code...
+	            e.printStackTrace();//TODO -ShopManageException
 	        }
 
-	        /*PincodeVerify gson = new Gson().fromJson(full, PincodeVerify.class); 
-	        response = new IsPincodeSupportedResponse(new PincodeVerifyConcrete(
-	                gson.getResults().get(0).getFormatted_address(), 
-	                gson.getResults().get(0).getGeometry().getLocation().getLat(),
-	                gson.getResults().get(0).getGeometry().getLocation().getLng())) ;
-	        try {
-	            String address = response.getAddress();
-	            Double latitude = response.getLatitude(), longitude = response.getLongitude();
-	            if (address == null || address.length() <= 0) {
-	                log.error("Address is null");
-	            }
-	        } catch (NullPointerException e) {
-	            log.error("Address, latitude on longitude is null");
-	        }*/
 	        conn.disconnect();
 	    } catch (MalformedURLException e) {
-	        e.printStackTrace();
+	        e.printStackTrace();//TODO -ShopManageException
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        e.printStackTrace();//TODO -ShopManageException
 	    }
 		return locationPoint;
 		
 	}
+
+	/**
+	 * Distance between two customer and shop
+	 * 
+	 * @param customer
+	 * @param shop
+	 * @return distance between customer and shop
+	 */
+	public static double calculateDistance(Location customer, Location shop ) {
+		
+		double custLat = Double.valueOf(customer.getLat()); 
+		double custLng = Double.valueOf(customer.getLng());
+		double shopLat = Double.valueOf(shop.getLat());
+		double shopLng = Double.valueOf(shop.getLng());
+
+	    double radiusOfEarth = 3958.75; // in miles 3958.75, in kilometer 6371 
+
+	    double latDiff = Math.toRadians(shopLat-custLat);
+	    double lngDiff = Math.toRadians(shopLng-custLng);
+
+	    double var = Math.pow(Math.sin(latDiff / 2), 2) + Math.pow(Math.sin(lngDiff / 2), 2)
+	    		        * Math.cos(Math.toRadians(custLat)) * Math.cos(Math.toRadians(shopLat));
+
+	    double distance = radiusOfEarth * 2 * Math.atan2(Math.sqrt(var), Math.sqrt(1-var));
+
+	    return distance; 
+	}
+
 
 }

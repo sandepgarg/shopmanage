@@ -1,13 +1,22 @@
 package com.sg.sm.util;
 
-
+/**
+ * 
+ * @author Sandeep Garg
+ *
+ */
 public class Location {
 	String lat;
 	String lng;
+
+	public Location(String longitude, String latitude) {
+		this.lng = longitude;
+		this.lat = latitude;
+	}
+	
 	/**
 	 * @return the longitude
 	 */
-	
 	public String getLat() {
 		return lat;
 	}

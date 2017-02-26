@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.sg.sm.exception.ShopDAOException;
 import com.sg.sm.exception.ShopManageException;
-import com.sg.sm.pojo.Shop;
 import com.sg.sm.pojo.ShopMaster;
 
 /**
@@ -38,13 +37,4 @@ public interface ShopDAO {
 	 */
 	ShopMaster getShop(String id) throws ShopManageException;
 	
-	/**
-	 * 
-	 * @param longitude
-	 * @param latitude
-	 * @return
-	 * @throws ShopManageException
-	 */
-	ShopMaster getShop(String longitude, String latitude) throws ShopManageException;
-
 }

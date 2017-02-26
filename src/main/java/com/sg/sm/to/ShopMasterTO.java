@@ -3,6 +3,8 @@
  */
 package com.sg.sm.to;
 
+import com.sg.sm.pojo.ShopMaster;
+
 /**
  * @author Sandeep Garg
  *
@@ -39,6 +41,21 @@ public class ShopMasterTO extends ShopTO {
 	 */
 	public void setShopLatitude(String shopLatitude) {
 		this.shopLatitude = shopLatitude;
+	}
+	
+	public static ShopMasterTO convertDTOToTO(ShopMaster shop) {
+		ShopMasterTO shopMasterTO = new ShopMasterTO();
+		if(shop != null) {
+			shopMasterTO.setId(shop.getId());
+			shopMasterTO.setShopName(shop.getName());
+			AddressTO addTo = new AddressTO();
+			addTo.setNumber(shop.getNumber());
+			addTo.setPostCode(shop.getPostCode());
+			shopMasterTO.setShopAddress(addTo);
+			shopMasterTO.setShopLongitude(shop.getLongitude());
+			shopMasterTO.setShopLatitude(shop.getLatitud());
+		}
+		return shopMasterTO;
 	}
 	
 

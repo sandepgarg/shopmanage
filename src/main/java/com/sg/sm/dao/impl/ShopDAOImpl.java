@@ -4,14 +4,15 @@
 package com.sg.sm.dao.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 import com.sg.sm.dao.ShopDAO;
 import com.sg.sm.exception.ShopDAOException;
 import com.sg.sm.exception.ShopManageException;
-import com.sg.sm.pojo.Shop;
 import com.sg.sm.pojo.ShopMaster;
 
 /**
@@ -20,14 +21,16 @@ import com.sg.sm.pojo.ShopMaster;
  */
 @Component
 public class ShopDAOImpl implements ShopDAO {
-	private static List<ShopMaster> listOfShop = new ArrayList<ShopMaster>();
+	
+	private static Map<String, ShopMaster> listOfShop = new HashMap<String, ShopMaster>();
+	
 	/* (non-Javadoc)
 	 * @see com.sg.sm.dao.ShopDAO#saveShop(com.sg.sm.to.ShopTO)
 	 */
 	@Override
 	public ShopMaster saveShop(ShopMaster shopMaster) throws ShopDAOException {
-		if(!listOfShop.contains(shopMaster)){
-			listOfShop.add(shopMaster);
+		if(!listOfShop.containsValue(shopMaster)){
+			listOfShop.put(shopMaster.getId(), shopMaster);
 		}
 		return shopMaster;
 	}
@@ -37,8 +40,7 @@ public class ShopDAOImpl implements ShopDAO {
 	 */
 	@Override
 	public List<ShopMaster> getShopCollection() throws ShopManageException {
-		// TODO Auto-generated method stub
-		return listOfShop;
+		return new ArrayList<ShopMaster>(listOfShop.values());
 	}
 
 	/* (non-Javadoc)
@@ -46,18 +48,8 @@ public class ShopDAOImpl implements ShopDAO {
 	 */
 	@Override
 	public ShopMaster getShop(String id) throws ShopManageException {
-		// TODO Auto-generated method stub
-		return null;
+		return listOfShop.get(id);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.sg.sm.dao.ShopDAO#getShop(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public ShopMaster getShop(String longitude, String latitude)
-			throws ShopManageException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }

@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sg.sm.pojo.Shop;
 
 /**
  * @author Sandeep Garg

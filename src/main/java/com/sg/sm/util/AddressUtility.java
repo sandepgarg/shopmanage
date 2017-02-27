@@ -34,25 +34,24 @@ public class AddressUtility {
 	        URL url = new URL("http://maps.googleapis.com/maps/api/geocode/json?address="
 	                        + UriUtils.encodeQuery(address, encoding) + "&sensor=true");
 	        
-	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	        conn.setRequestMethod("GET");
-	        conn.setRequestProperty("Accept", "application/json");
+	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	        connection.setRequestMethod("GET");
+	        connection.setRequestProperty("Accept", "application/json");
 
-	        if (conn.getResponseCode() != 200) {
-	            throw new ShopManageException("Failed : HTTP error code : " + conn.getResponseCode());
+	        if (connection.getResponseCode() != 200) {
+	            throw new ShopManageException("Failed : HTTP error code : " + connection.getResponseCode());
 	        }
-	        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-	        String output = "", full = "";
-	        while ((output = br.readLine()) != null) {
-	            full += output;
+	        BufferedReader buffer = new BufferedReader(new InputStreamReader((connection.getInputStream())));
+	        String value = "", result = "";
+	        while ((value = buffer.readLine()) != null) {
+	            result += value;
 	        }
 	        
 	        JSONObject json;
-	        System.out.println(full);
 	        try {
 
 	            String lat, lon;
-	            json = new JSONObject(full);
+	            json = new JSONObject(result);
 	            JSONObject geoMetryObject = new JSONObject();
 	            JSONObject locations = new JSONObject();
 	            JSONArray jarr = json.getJSONArray("results");
@@ -69,7 +68,7 @@ public class AddressUtility {
 	        	throw new ShopManageException(e.getMessage());
 	        }
 
-	        conn.disconnect();
+	        connection.disconnect();
 	    } catch (MalformedURLException e) {
 	    	throw new ShopManageException(e.getMessage());
 	    } catch (IOException e) {

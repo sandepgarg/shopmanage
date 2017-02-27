@@ -20,6 +20,9 @@ import com.sg.sm.exception.ShopManageException;
 import com.sg.sm.service.ShopService;
 import com.sg.sm.to.ShopMasterTO;
 import com.sg.sm.to.ShopTO;
+import com.sg.sm.to.common.ResourceCollection;
+import com.sg.sm.to.common.Error;
+import com.sg.sm.util.CommonUtil;
 
 @RestController
 public class ShopController {
@@ -44,25 +47,33 @@ public class ShopController {
 			try {
 				shop = shopService.getShop(longitude, latitude);
 			} catch (ShopManageException e) {
-				ResponseEntity<String> shopResponseEntity = new ResponseEntity<>(INTERNAL_SERVER_MESSAGE, null, HttpStatus.INTERNAL_SERVER_ERROR);
-				return shopResponseEntity;
+				Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR.value(), 0, INTERNAL_SERVER_MESSAGE);
+				ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.INTERNAL_SERVER_ERROR);
+				return errorResponse;
 			}
 			if(shop!= null) {
 				ResponseEntity<ShopTO> shopResponse =  new ResponseEntity<ShopTO>(shop, null, HttpStatus.OK);
 				return shopResponse;		
 			} else {
-				ResponseEntity<String> shopResponseEntity = new ResponseEntity<>("No shop found.", null, HttpStatus.NOT_FOUND);
-				return shopResponseEntity;
+				
+				Error error = new Error(HttpStatus.NOT_FOUND.value(), 0, "No shop found.");
+				ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.NOT_FOUND);
+				return errorResponse;
+			
 			}
 		}
 		
-		List<ShopTO> shopCollection=new ArrayList<ShopTO>();
+		ResourceCollection<ShopTO> collection = new ResourceCollection<ShopTO>();
 		try {
+			List<ShopTO> shopCollection = new ArrayList<ShopTO>();
 			shopCollection = shopService.getShopCollection();
+			collection.setItems(shopCollection);
 		} catch (ShopManageException e) {
-			
+			Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR.value(), 0, INTERNAL_SERVER_MESSAGE);
+			ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return errorResponse;
 		}
-		ResponseEntity<List<ShopTO>> shopCollectionResponse =  new ResponseEntity<List<ShopTO>>(shopCollection, null, HttpStatus.OK);
+		ResponseEntity<ResourceCollection<ShopTO>> shopCollectionResponse =  new ResponseEntity<ResourceCollection<ShopTO>>(collection, CommonUtil.getErrHeader(), HttpStatus.OK);
 		return shopCollectionResponse;
 		
 	}
@@ -74,16 +85,19 @@ public class ShopController {
 			try {
 				savedShopTO = shopService.saveShop(shopTO);
 				} catch (ShopManageException e) {
-					ResponseEntity<String> shopResponseEntity = new ResponseEntity<>(INTERNAL_SERVER_MESSAGE, null, HttpStatus.INTERNAL_SERVER_ERROR);
-					return shopResponseEntity;
+					Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR.value(), 0, INTERNAL_SERVER_MESSAGE);
+					ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.INTERNAL_SERVER_ERROR);
+					return errorResponse;
 				}
 		}
 		if(savedShopTO !=  null) {
 			ResponseEntity<ShopTO> shopResponseEntity = new ResponseEntity<>(savedShopTO, null, HttpStatus.OK);
 			return shopResponseEntity;
 		} else {
-			ResponseEntity<String> messageResponseEntity = new ResponseEntity<>("Shop can not be saved", null, HttpStatus.BAD_REQUEST);
-			return messageResponseEntity;
+
+			Error error = new Error(HttpStatus.BAD_REQUEST.value(), 0, "Shop can not be saved");
+			ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.BAD_REQUEST);
+			return errorResponse;
 		}
 	}
 	
@@ -92,21 +106,24 @@ public class ShopController {
 	public ResponseEntity<?> handleGetShop(HttpServletRequest request, @PathVariable("shopId") String shopId) {
 		ShopMasterTO shopMaster = null;
 		if(shopId == null) {
-			ResponseEntity<String> messageResponseEntity = new ResponseEntity<>("Shop id is not proper, please provide a appropriate shop Id.", null, HttpStatus.BAD_REQUEST);
+			ResponseEntity<String> messageResponseEntity = new ResponseEntity<>("Shop id is not proper, please provide a appropriate shop Id.", CommonUtil.getErrHeader(), HttpStatus.BAD_REQUEST);
 			return messageResponseEntity;
 		}
 		try {
 			shopMaster = shopService.getShop(shopId);
 		} catch (ShopManageException e) {
-			ResponseEntity<String> shopResponseEntity = new ResponseEntity<>(INTERNAL_SERVER_MESSAGE, null, HttpStatus.INTERNAL_SERVER_ERROR);
-			return shopResponseEntity;
+			Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR.value(), 0, INTERNAL_SERVER_MESSAGE);
+			ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return errorResponse;
 		}
 		if(shopMaster != null) {
 			ResponseEntity<ShopMasterTO> shopResponseEntity = new ResponseEntity<>(shopMaster, null, HttpStatus.OK);
 			return shopResponseEntity;
 		} else {
-			ResponseEntity<String> messageResponseEntity = new ResponseEntity<>("Shop of id = " + shopId + " is not found.", null, HttpStatus.NOT_FOUND);
-			return messageResponseEntity;
+			
+			Error error = new Error(HttpStatus.NOT_FOUND.value(), 0, "Shop of id = " + shopId + " is not found.");
+			ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.NOT_FOUND);
+			return errorResponse;
 		}
 		
 	}

@@ -44,7 +44,7 @@ public class ShopServiceImpl implements ShopService{
 		try {
 			shopDao.saveShop(shopMaster);
 		} catch (ShopDAOException e) {
-			throw new ShopManageException();//TODO
+			throw new ShopManageException(e.getMessage());//TODO
 		}
 		
 		return ShopMasterTO.convertDTOToTO(shopDao.getShop(shop.getId()));
@@ -85,7 +85,11 @@ public class ShopServiceImpl implements ShopService{
 				shopMaster = shop;
 			} 
 		}
-		return ShopMasterTO.convertDTOToTO(shopMaster);
+		if(shopMaster != null) {
+			return ShopMasterTO.convertDTOToTO(shopMaster);
+		} else {
+			return null;
+		}
 	}
 
 

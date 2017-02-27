@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.util.UriUtils;
 
+import com.sg.sm.exception.ShopManageException;
+
 /**
  * @author Sandeep Garg
  *
@@ -84,24 +86,29 @@ public class AddressUtility {
 	 * @param shop
 	 * @return distance between customer and shop
 	 */
-	public static double calculateDistance(Location customer, Location shop ) {
+	public static double calculateDistance(Location customer, Location shop ) throws ShopManageException{
+		try{
+			double custLat = Double.valueOf(customer.getLat()); 
+			double custLng = Double.valueOf(customer.getLng());
+			double shopLat = Double.valueOf(shop.getLat());
+			double shopLng = Double.valueOf(shop.getLng());
+
+		    double radiusOfEarth = 3958.75; // in miles 3958.75, in kilometer 6371 
+
+		    double latDiff = Math.toRadians(shopLat-custLat);
+		    double lngDiff = Math.toRadians(shopLng-custLng);
+
+		    double var = Math.pow(Math.sin(latDiff / 2), 2) + Math.pow(Math.sin(lngDiff / 2), 2)
+		    		        * Math.cos(Math.toRadians(custLat)) * Math.cos(Math.toRadians(shopLat));
+
+		    double distance = radiusOfEarth * 2 * Math.atan2(Math.sqrt(var), Math.sqrt(1-var));
+
+		    return distance; 
+			
+		} catch (RuntimeException exp) {
+			throw new ShopManageException(exp.getMessage());
+		}
 		
-		double custLat = Double.valueOf(customer.getLat()); 
-		double custLng = Double.valueOf(customer.getLng());
-		double shopLat = Double.valueOf(shop.getLat());
-		double shopLng = Double.valueOf(shop.getLng());
-
-	    double radiusOfEarth = 3958.75; // in miles 3958.75, in kilometer 6371 
-
-	    double latDiff = Math.toRadians(shopLat-custLat);
-	    double lngDiff = Math.toRadians(shopLng-custLng);
-
-	    double var = Math.pow(Math.sin(latDiff / 2), 2) + Math.pow(Math.sin(lngDiff / 2), 2)
-	    		        * Math.cos(Math.toRadians(custLat)) * Math.cos(Math.toRadians(shopLat));
-
-	    double distance = radiusOfEarth * 2 * Math.atan2(Math.sqrt(var), Math.sqrt(1-var));
-
-	    return distance; 
 	}
 
 

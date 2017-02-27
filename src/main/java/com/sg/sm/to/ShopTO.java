@@ -3,14 +3,22 @@
  */
 package com.sg.sm.to;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sg.sm.config.URLConstants;
 import com.sg.sm.pojo.Shop;
 import com.sg.sm.pojo.ShopMaster;
+import com.sg.sm.to.common.Link;
 
 /**
  * @author Sandeep Garg
  *
  */
 public class ShopTO {
+	protected List<Link> links = new ArrayList<Link>();
+	
+	private final int version = 1;
 	
 	private String id;
 	private String shopName;
@@ -35,6 +43,20 @@ public class ShopTO {
 		this.shopAddress = shopAddress;
 	}
 	
+	/**
+	 * @return the link
+	 */
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	/**
+	 * @param link the link to set
+	 */
+	public void setLink(List<Link> links) {
+		this.links = links;
+	}
+	
 	public static Shop convertTOToDTO(ShopTO shopTO) {
 		Shop shop = new Shop();
 		if(shopTO != null) {
@@ -55,8 +77,21 @@ public class ShopTO {
 			addTo.setNumber(shop.getNumber());
 			addTo.setPostCode(shop.getPostCode());
 			shopTO.setShopAddress(addTo);
+			shopTO.addLinks();
 		}
 		return shopTO;
+	}
+	
+	private void addLinks() {
+		this.links.add(new Link("GET", "self", URLConstants.SHOP_LIST_SELF_URI));
+		this.links.add(new Link("GET", "up", URLConstants.APP_URI));
+	}
+	
+	/**
+	 * @return the version
+	 */
+	public int getVersion() {
+		return version;
 	}
 
 }

@@ -10,6 +10,10 @@ package com.sg.sm.exception;
 
 public class ShopManageException extends Exception {
 
+	public ShopManageException(String string) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * 
 	 */

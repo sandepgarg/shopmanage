@@ -3,13 +3,17 @@
  */
 package com.sg.sm.to;
 
+import com.sg.sm.config.URLConstants;
 import com.sg.sm.pojo.ShopMaster;
+import com.sg.sm.to.common.Link;
 
 /**
  * @author Sandeep Garg
  *
  */
 public class ShopMasterTO extends ShopTO {
+	
+	private final int version = 1;
 	
 	private String shopLongitude;
 	
@@ -54,9 +58,21 @@ public class ShopMasterTO extends ShopTO {
 			shopMasterTO.setShopAddress(addTo);
 			shopMasterTO.setShopLongitude(shop.getLongitude());
 			shopMasterTO.setShopLatitude(shop.getLatitud());
+			shopMasterTO.addLinks();
 		}
 		return shopMasterTO;
 	}
-	
+
+	private void addLinks() {
+		this.links.add(new Link("GET", "self", URLConstants.SHOP_LIST_SELF_URI));
+		this.links.add(new Link("GET", "up", URLConstants.APP_URI));
+	}
+	/**
+	 * @return the version
+	 */
+	public int getVersion() {
+		return version;
+	}
+
 
 }

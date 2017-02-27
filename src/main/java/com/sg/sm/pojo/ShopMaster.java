@@ -3,11 +3,13 @@
  */
 package com.sg.sm.pojo;
 
+
 /**
  * @author Sandeep Garg
  *
  */
 public class ShopMaster implements Comparable<ShopMaster> {
+	
 	private String id;
 	private String name;
 	private String number;

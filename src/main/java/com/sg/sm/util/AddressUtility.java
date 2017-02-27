@@ -27,7 +27,7 @@ public class AddressUtility {
 	 * @param address
 	 * @return
 	 */
-	public static Location readWebService(String address) {
+	public static Location readWebService(String address) throws ShopManageException {
 		Location locationPoint = null;
 		try {
 			String encoding ="UTF-8";
@@ -39,7 +39,7 @@ public class AddressUtility {
 	        conn.setRequestProperty("Accept", "application/json");
 
 	        if (conn.getResponseCode() != 200) {
-	            throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());//TODO -ShopManageException
+	            throw new ShopManageException("Failed : HTTP error code : " + conn.getResponseCode());
 	        }
 	        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 	        String output = "", full = "";
@@ -66,14 +66,14 @@ public class AddressUtility {
 	                locationPoint = new Location(lat, lon); 
 	            }
 	        } catch (Exception e) {
-	            e.printStackTrace();//TODO -ShopManageException
+	        	throw new ShopManageException(e.getMessage());
 	        }
 
 	        conn.disconnect();
 	    } catch (MalformedURLException e) {
-	        e.printStackTrace();//TODO -ShopManageException
+	    	throw new ShopManageException(e.getMessage());
 	    } catch (IOException e) {
-	        e.printStackTrace();//TODO -ShopManageException
+	    	throw new ShopManageException(e.getMessage());
 	    }
 		return locationPoint;
 		

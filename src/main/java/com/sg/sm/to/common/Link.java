@@ -3,6 +3,8 @@
  */
 package com.sg.sm.to.common;
 
+import com.sg.sm.util.CommonUtil;
+
 /**
  * @author sinsae
  *
@@ -15,18 +17,18 @@ public class Link {
     
     public Link(String method, String rel, String uri)
     {
-        this(method, rel, uri, /*ApplicationBaseUrl.getUrl() +*/ uri); //TODO
+    	this(method, rel, uri, CommonUtil.getBaseURL() + uri);
         if (uri.length() > 0 && !uri.startsWith("/")) {
             throw new IllegalArgumentException("uri must be \"\" or start with '/'");
         }
     }
-    
+
     public Link(String method, String rel, String uri, String href)
     {
         super();
         setMethod(method);
         setRel(rel);
-        setUri(uri); // must set uri before setting href, because href validates against it.
+        setUri(uri); 
         setHref(href);
     }
     

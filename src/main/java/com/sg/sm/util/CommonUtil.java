@@ -19,4 +19,12 @@ public class CommonUtil {
 		headers.set(URLConstants.HEADER_CONTENT_TYPE, URLConstants.GENERIC_ERROR_MEDIA_TYPE);
 		return headers;
 	}
+	
+	public static String getBaseURL() {
+		HttpServletRequest request = getHttpRequest();
+		StringBuffer requestURL = request.getRequestURL();
+		String requestURI = request.getRequestURI();
+		String baseURL = requestURL.substring(0,requestURL.indexOf(requestURI));
+		return baseURL + request.getContextPath();
+	}
 }

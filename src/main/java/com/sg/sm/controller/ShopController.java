@@ -79,7 +79,9 @@ public class ShopController {
 		ShopTO savedShopTO = null;
 		if(shopTO!= null) {
 			try {
+				
 				savedShopTO = shopService.saveShop(shopTO);
+				
 				} catch (ShopManageException e) {
 					Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR.value(), 0, INTERNAL_SERVER_MESSAGE);
 					ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -87,13 +89,16 @@ public class ShopController {
 				}
 		}
 		if(savedShopTO !=  null) {
+			
 			ResponseEntity<ShopTO> shopResponseEntity = new ResponseEntity<>(savedShopTO, null, HttpStatus.OK);
 			return shopResponseEntity;
+		
 		} else {
 
-			Error error = new Error(HttpStatus.BAD_REQUEST.value(), 0, "Shop can not be saved");
-			ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.BAD_REQUEST);
+			Error error = new Error(HttpStatus.CONFLICT.value(), 0, "Shop with this id already exist.", "Save the shop with different Id");
+			ResponseEntity<Error> errorResponse =  new ResponseEntity<Error>(error, CommonUtil.getErrHeader(), HttpStatus.CONFLICT);
 			return errorResponse;
+			
 		}
 	}
 	

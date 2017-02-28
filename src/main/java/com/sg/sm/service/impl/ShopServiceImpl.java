@@ -41,13 +41,17 @@ public class ShopServiceImpl implements ShopService{
 		shopMaster.setLongitude(""+ location.getLat());
 		shopMaster.setLatitud("" + location.getLng());
 		
+		ShopMaster savedShop = null;
 		try {
-			shopDao.saveShop(shopMaster);
+			savedShop = shopDao.saveShop(shopMaster);
 		} catch (ShopDAOException e) {
 			throw new ShopManageException(e.getMessage());
 		}
-		
-		return ShopMasterTO.convertDTOToTO(shopDao.getShop(shop.getId()));
+		if(savedShop != null) {
+			return ShopMasterTO.convertDTOToTO(shopDao.getShop(shop.getId()));
+		} else {
+			return null;
+		}
 	}
 
 	@Override

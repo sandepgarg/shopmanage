@@ -1,6 +1,5 @@
 package com.sg.sm.to.common;
 
-import java.util.List;
 
 public class Error {
 	public static final int VERSION = 1;
@@ -11,12 +10,11 @@ public class Error {
 
 	public Error(final int statusCode, final int errorCode,
 			final String message) {
-		this(statusCode, errorCode, message, null, null);
+		this(statusCode, errorCode, message, null);
 	}
 
 	public Error(final int statusCode, final int errorCode,
-			final String message, final List<String> details,
-			final String remediation) {
+			final String message, final String remediation) {
 		setStatusCode(statusCode);
 		setErrorCode(errorCode);
 		setMessage(message);

@@ -29,10 +29,13 @@ public class ShopDAOImpl implements ShopDAO {
 	 */
 	@Override
 	public ShopMaster saveShop(ShopMaster shopMaster) throws ShopDAOException {
+		
 		if(!listOfShop.containsValue(shopMaster)){
 			listOfShop.put(shopMaster.getId(), shopMaster);
+		} else {
+			return null;
 		}
-		return shopMaster;
+		return listOfShop.get(shopMaster.getId());
 	}
 
 	/* (non-Javadoc)

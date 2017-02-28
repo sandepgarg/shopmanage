@@ -15,8 +15,9 @@ public interface URLConstants {
 	
 	public static final String GENERIC_MEDIA_TYPE= "application/json";
 	public static final String GENERIC_ERROR_MEDIA_TYPE = "application/vnd.sg.sm.error+json";;
-	public static final String PURPOSE_MEDIA_TYPE = "application/vnd.sg.sm.shop+json";
-	public static final String PURPOSE_ACCEPT_HEADERS = PURPOSE_MEDIA_TYPE + " " + GENERIC_MEDIA_TYPE;
+
+	public static final String SHOP_MEDIA_TYPE = "application/vnd.sg.sm.shop+json";
+	public static final String SHOP_ACCEPT_HEADERS = SHOP_MEDIA_TYPE + " "+ GENERIC_MEDIA_TYPE;
 	
 	public static final String GENERIC_COLLECTION_MEDIA_TYPE = "application/vnd.sg.collection+json";
 	

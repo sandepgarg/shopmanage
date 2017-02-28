@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sg.sm.config.URLConstants;
 import com.sg.sm.exception.ShopManageException;
 import com.sg.sm.service.ShopService;
 import com.sg.sm.to.ShopMasterTO;
@@ -29,15 +30,10 @@ public class ShopController {
 	
 	public static final String INTERNAL_SERVER_MESSAGE = "There is some error. Please contact adminstrator.";
 	
-	public static final String GENERIC_MEDIA_TYPE= "application/json";
-	public static final String GENERIC_COLLECTION_MEDIA_TYPE = "application/vnd.sg.collection+json";
-	public static final String SHOP_MEDIA_TYPE = "application/vnd.sg.sm.shop+json";
-	public static final String SHOP_ACCEPT_HEADERS = SHOP_MEDIA_TYPE + " "+ GENERIC_MEDIA_TYPE;
-	
 	@Autowired
 	private ShopService shopService;
 	
-	@RequestMapping(value="/shops", method=RequestMethod.GET,produces = {GENERIC_COLLECTION_MEDIA_TYPE})
+	@RequestMapping(value="/shops", method=RequestMethod.GET,produces = {URLConstants.GENERIC_COLLECTION_MEDIA_TYPE})
 	public ResponseEntity<?> handleGetNearByShop(
 			@RequestParam(value = "longitude", required = false)  String longitude,
 			@RequestParam(value = "latitude", required = false)  String latitude) {
@@ -78,7 +74,7 @@ public class ShopController {
 		
 	}
 	
-	@RequestMapping(value="/shops", method=RequestMethod.POST, consumes = {SHOP_MEDIA_TYPE, GENERIC_MEDIA_TYPE }, produces = {SHOP_MEDIA_TYPE})
+	@RequestMapping(value="/shops", method=RequestMethod.POST, consumes = {URLConstants.SHOP_MEDIA_TYPE, URLConstants.GENERIC_MEDIA_TYPE }, produces = {URLConstants.SHOP_MEDIA_TYPE})
 	public ResponseEntity<?> handleSaveShop(HttpServletRequest request, @RequestBody ShopTO shopTO) {
 		ShopTO savedShopTO = null;
 		if(shopTO!= null) {
